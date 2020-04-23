@@ -156,7 +156,7 @@ namespace CourseLibrary.API.Services
                     collection = collection.OrderBy(a => a.FirstName).ThenBy(a => a.LastName);
                 }
 
-                collection.ApplaySort(authorsResourceParameters.OrderBy, _mappingDictionary);
+                //collection.ApplaySort(authorsResourceParameters.OrderBy, _mappingDictionary);
             }
 
             return PagedList<Author>.Create(collection, authorsResourceParameters.PageNumber, authorsResourceParameters.PageSize);
