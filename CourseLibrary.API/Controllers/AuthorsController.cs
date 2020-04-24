@@ -116,6 +116,7 @@ namespace CourseLibrary.API.Controllers
                 case ResourceUriType.PreviusPage:
                     return Url.Link("GetAuthors", new
                     {
+                        orderBy = authorsResourceParameters.OrderBy,
                         pageNmber = authorsResourceParameters.PageNumber - 1,
                         pageSize = authorsResourceParameters.PageSize,
                         mainCategory = authorsResourceParameters.MainCategory,
@@ -124,6 +125,7 @@ namespace CourseLibrary.API.Controllers
                 case ResourceUriType.NextPage:
                     return Url.Link("GetAuthors", new
                     {
+                        orderBy = authorsResourceParameters.OrderBy,
                         pageNumber = authorsResourceParameters.PageNumber,
                         pageSize = authorsResourceParameters.PageSize,
                         mainCategory = authorsResourceParameters.MainCategory,
@@ -132,6 +134,7 @@ namespace CourseLibrary.API.Controllers
                 default:
                     return Url.Link("GetAuthors", new
                     {
+                        orderBy = authorsResourceParameters.OrderBy,
                         pageNumber = authorsResourceParameters.PageNumber,
                         pageSize = authorsResourceParameters.PageSize,
                         mainCategory = authorsResourceParameters.MainCategory,
