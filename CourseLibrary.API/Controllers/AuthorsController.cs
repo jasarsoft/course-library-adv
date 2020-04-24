@@ -87,8 +87,14 @@ namespace CourseLibrary.API.Controllers
             {
                 return NotFound();
             }
-             
-            return Ok(_mapper.Map<AuthorDto>(authorFromRepo).ShapeData(fields));
+
+            var links = CreateLinksForAuthor(authorId, fields);
+            
+            var linkedResourceToReturn =
+                _mapper.Map<AuthorDto>(authorFromRepo).ShapeData(fields) as IDictionary<string, object>;
+            linkedResourceToReturn.Add("links", links);
+
+            return Ok(linkedResourceToReturn);
         }
 
         [HttpPost]
@@ -111,7 +117,7 @@ namespace CourseLibrary.API.Controllers
             return Ok();
         }
 
-        [HttpDelete("{authorId}")]
+        [HttpDelete("{authorId}", Name = "DeleteAuthor")]
         public ActionResult DeleteAuthor(Guid authorId)
         {
             var authorFromRepo = _courseLibraryRepository.GetAuthor(authorId);
@@ -164,6 +170,26 @@ namespace CourseLibrary.API.Controllers
                         searchQuery = authorsResourceParameters.SearchQuery
                     });
             }
+        }
+
+        private IEnumerable<LinkDto> CreateLinksForAuthor(Guid authorId, string fields)
+        {
+            var links = new List<LinkDto>();
+
+            if (string.IsNullOrWhiteSpace(fields))
+            {
+                links.Add(new LinkDto(Url.Link("GetAuthor", new {authorId}), "self", "GET"));
+            }
+            else
+            {
+                links.Add(new LinkDto(Url.Link("GetAuthor", new {authorId, fields}), "self", "GET"));
+            }
+
+            links.Add(new LinkDto(Url.Link("DeleteAuthor", new {authorId}), "delete_author", "DELETE"));
+            links.Add(new LinkDto(Url.Link("CreateCourseForAuthor", new {authorId}), "create_course_for_author", "POST"));
+            links.Add(new LinkDto(Url.Link("GetCoursesForAuthor", new {authorId}), "courses", "GET"));
+
+            return links;
         }
     }
 }
